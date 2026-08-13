@@ -1,5 +1,6 @@
 "use client"
 
+import axios from "axios";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,45 +16,53 @@ export default function Home() {
 
   const router = useRouter()
 
-
-  async function handleSignin(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSignup(e: React.FormEvent<HTMLFormElement>) {
     if (loading) return
     e.preventDefault()
     setLoading(true)
+    try {
 
-    if (!password || !email) {
-      toast('All fields are required!', {
-        style: {
-          background: "#9810fa",
-          color: "white"
-        }
+      await axios.post('/api/auth/register', {
+        email,
+        password
       })
-      setLoading(false)
-      return
-    }
 
-    const res = await signIn('credentials', {
-      email,
-      password,
-      redirect: false
-    })
-
-    if (res?.error) {
-      toast('Invalid credentials', {
-        style: {
-          background: "#9810fa",
-          color: "white"
-        }
-      })
-    } else {
-      toast('Signin successful', {
+      toast('Register successful', {
         style: {
           background: "#9810fa",
           color: "white"
         }
       })
 
-      router.replace('/auth/setup-profile')
+      const loginRes = await signIn("credentials", {
+        email,
+        password,
+        redirect: false
+      })
+
+      if (loginRes?.error) {
+        router.replace("/")
+      } else {
+        router.replace('/auth/setup-profile')
+      }
+
+    } catch (error: unknown) {
+
+      if (axios.isAxiosError(error)) {
+        toast(error.response?.data.error || 'something went wrong', {
+          style: {
+            background: "#9810fa",
+            color: "white"
+          }
+        })
+      } else {
+        toast('Network error please try again', {
+          style: {
+            background: "#9810fa",
+            color: "white"
+          }
+        })
+      }
     }
 
     setLoading(false)
@@ -68,10 +77,10 @@ export default function Home() {
           />
         </div>
         <h2 className="text-center font-bold my-6 text-gray-300">
-          Sign in to your account
+          Create new account
         </h2>
         <form
-          onSubmit={handleSignin}
+          onSubmit={handleSignup}
           className="py-10 px-6 rounded-lg shadow-md"
         >
           <input
@@ -91,14 +100,14 @@ export default function Home() {
           <button
             className="w-full bg-blue-500 my-2 py-2 text-white rounded-lg cursor-pointer hover:bg-blue-600 transition"
           >
-            {loading ? "Loading..." : "Login"}
+            {loading ? "Loading..." : "Signup"}
           </button>
           <div className="my-3 text-center text-white">
-            <span>Don&apos;t have an account</span>
+            <span>Already have an account</span>
             <Link
-              href={'/auth/signup'}
+              href={'/'}
               className="ml-2 text-blue-600">
-              Register
+              Login
             </Link>
           </div>
         </form>
