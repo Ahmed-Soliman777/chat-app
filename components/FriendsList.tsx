@@ -1,44 +1,52 @@
+"use client"
+
+import { useGetUsers } from "@/custom-hook/useUser"
+import { User } from "@/src/generated/client"
 import Image from "next/image"
 
-const FriendsList = () => {
+const FriendsList = (
+  { onlineIds }: { onlineIds: string[] }
+) => {
+
+  const { users, isLoading, isError } = useGetUsers()
+
+  if (isLoading) return <p className='text-xl text-gray-400 mt-15'>Loading...</p>
+
+  if (isError) return <p className='text-xl text-gray-400 mt-15'>Internal server error</p>
+
   return (
     <section className="mt-15">
 
-      <div className="flex items-center gap-2 p-3 rounded-lg cursor-pointer hover:bg-input-bg">
+      {users.map((user: User) => {
 
-        <Image
-          src={'/profile.jpg'}
-          alt='profile-pic'
-          width={100}
-          height={100}
-          className="w-12 h-12 rounded-full object-cover"
-        />
+        const isOnline = onlineIds.includes(user.id)
 
-        <div>
-          <p className="font-semibold text-white">Johnny</p>
-          <span className="text-sm text-gray-400">offline</span>
-        </div>
+        return (
+          <div
+            key={user.id}
+            className="flex items-center gap-2 p-3 rounded-lg cursor-pointer hover:bg-input-bg" >
+            {
+              user.avatar && (
+                <Image
+                  src={user.avatar}
+                  alt={user.name || "Avatar"}
+                  width={100}
+                  height={100}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+              )
+            }
 
-      </div>
+            <div>
+              <p className="font-semibold text-white">{user.name}</p>
+              <span className={`text-sm ${!isOnline ? 'text-gray-400' : 'text-green-400'}`}>{isOnline ? "online" : "offline"}</span>
+            </div>
 
-      <div className="flex items-center gap-2 p-3 rounded-lg cursor-pointer hover:bg-input-bg">
+          </div>
+        )
+      })}
 
-        <Image
-          src={'/profile2.jpg'}
-          alt='profile-pic'
-          width={100}
-          height={100}
-          className="w-12 h-12 rounded-full object-cover"
-        />
-
-        <div>
-          <p className="font-semibold text-white">John</p>
-          <span className="text-sm text-green-400">online</span>
-        </div>
-
-      </div>
-
-    </section>
+    </section >
   )
 }
 
