@@ -77,6 +77,7 @@ const LeftSidebar = () => {
 
                     <FriendsList
                         onlineIds={onlineIds}
+                        setSidebarOpen={setSidebarOpen}
                     />
 
                 </div>

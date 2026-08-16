@@ -1,9 +1,19 @@
 import { create } from "zustand";
 
 type ChatUser = {
-  onlineIds: string[];
+  id: string;
+  name: string;
+  avatar: string;
 };
 
-export const useChatStore = create<ChatUser>((set) => ({
-   onlineIds: [] 
-}))
+type ChatState = {
+  onlineIds: string[];
+  activeChatUser: ChatUser | null;
+  setActiveChatUser: (user: ChatUser) => void;
+};
+
+export const useChatStore = create<ChatState>((set) => ({
+  onlineIds: [],
+  activeChatUser: null,
+  setActiveChatUser: (user) => set({ activeChatUser: user }),
+}));
