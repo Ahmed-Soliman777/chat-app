@@ -3,6 +3,7 @@
 import Image from "next/image"
 import LogoutButton from "./LogoutButton"
 import { useGetUser } from "@/custom-hook/useUser"
+import { SpinnerCircularFixed } from "spinners-react"
 
 const RightSidebar = () => {
 
@@ -11,7 +12,11 @@ const RightSidebar = () => {
     if (isLoading) {
         return (
             <aside className="h-screen fixed top-0 right-0 w-87.5 border border-border">
-                <p className="text-xl text-gray-400">Loading...</p>
+                return (
+                <div className="flex justify-center items-center py-30">
+                    <SpinnerCircularFixed size={30} color="#4f39f6" />
+                </div>
+                )
             </aside>
         )
     }

@@ -2,23 +2,24 @@
 
 import ChatInput from "@/components/ChatInput"
 import ChatWindow from "@/components/ChatWindow"
-import { useGetMessage } from "@/custom-hook/useMessage"
-import { useChatStore } from "@/lib/store"
+import { GetMessage } from "@/custom-hook/useMessage"
+import { ChatStore } from "@/lib/store"
 import Image from "next/image"
 import { FaUser } from "react-icons/fa6"
+import { SpinnerCircularFixed } from "spinners-react"
 
 const page = () => {
 
-  const { activeChatUser, onlineIds } = useChatStore()
+  const { activeChatUser, onlineIds } = ChatStore()
 
   const receiverId = activeChatUser?.id
 
-  const { messages, isLoading, isError } = useGetMessage(receiverId)
+  const { messages, isLoading, isError } = GetMessage(receiverId)
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center p-4">
-        <p className="text-gray-400">Loading...</p>
+      <div className="flex justify-center items-center py-30">
+        <SpinnerCircularFixed size={30} color="#4f39f6" />
       </div>
     )
   }

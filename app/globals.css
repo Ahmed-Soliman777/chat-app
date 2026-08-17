@@ -6,3 +6,17 @@
   --color-input-bg: #334155;
   --color-border: #1e293b;
 }
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 9999px;
+  -webkit-border-radius: 9999px;
+  -moz-border-radius: 9999px;
+  -ms-border-radius: 9999px;
+  -o-border-radius: 9999px;
+}

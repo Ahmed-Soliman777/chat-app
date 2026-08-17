@@ -5,7 +5,7 @@ import FriendsList from "./FriendsList"
 import { AiFillMessage } from "react-icons/ai"
 import { useEffect, useState } from "react"
 import { pusherClient } from "@/lib/pusher-client"
-import { useChatStore } from "@/lib/store"
+import { ChatStore } from "@/lib/store"
 import { Members } from "pusher-js"
 
 type PresenceMember = {
@@ -17,7 +17,7 @@ const LeftSidebar = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(true)
 
 
-    const { onlineIds } = useChatStore()
+    const { onlineIds } = ChatStore()
 
 
     useEffect(() => {
@@ -25,14 +25,14 @@ const LeftSidebar = () => {
 
         // initial members list
         channel.bind('pusher:subscription_succeeded', (members: Members) => {
-            useChatStore.setState({
+            ChatStore.setState({
                 onlineIds: Object.keys(members.members)
             })
         })
 
         // add logged in user as a member
         channel.bind('pusher:member_added', (member: PresenceMember) => {
-            useChatStore.setState((state) => {
+            ChatStore.setState((state) => {
                 if (state.onlineIds.includes(member.id)) return state
                 return { onlineIds: [...state.onlineIds, member.id] }
             })
@@ -40,7 +40,7 @@ const LeftSidebar = () => {
 
         // remove users when they go offline
         channel.bind('pusher:member_removed', (member: PresenceMember) => {
-            useChatStore.setState((state) => ({
+            ChatStore.setState((state) => ({
                 onlineIds: state.onlineIds.filter((id) => id !== member.id)
             }))
         })

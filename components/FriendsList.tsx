@@ -1,8 +1,7 @@
-"use client"
-
-import { useGetUsers } from "@/custom-hook/useUser"
-import { useChatStore } from "@/lib/store"
+import { GetUsers } from "@/custom-hook/useUser"
+import { ChatStore } from "@/lib/store"
 import Image from "next/image"
+import { SpinnerCircularFixed } from "spinners-react"
 
 type User = {
   name: string
@@ -24,11 +23,17 @@ const FriendsList = (
   }
 ) => {
 
-  const { users, isLoading, isError } = useGetUsers()
+  const { users, isLoading, isError } = GetUsers()
 
-  const { setActiveChatUser } = useChatStore()
+  const { setActiveChatUser } = ChatStore()
 
-  if (isLoading) return <p className='text-xl text-gray-400 mt-15'>Loading...</p>
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center py-30">
+        <SpinnerCircularFixed size={30} color="#4f39f6"/>
+      </div>
+    )
+  }
 
   if (isError) return <p className='text-xl text-gray-400 mt-15'>Internal server error</p>
 
@@ -50,7 +55,7 @@ const FriendsList = (
               setSidebarOpen(false)
             }}
             key={user.id}
-            className="flex items-center gap-2 p-3 rounded-lg cursor-pointer hover:bg-input-bg" >
+            className="flex items-center bg-indigo-600 gap-2 p-3 rounded-lg cursor-pointer hover:bg-input-bg" >
             {
               user.avatar && (
                 <Image

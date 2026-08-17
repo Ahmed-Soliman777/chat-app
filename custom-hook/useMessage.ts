@@ -1,15 +1,14 @@
+"use client"
 import { MessageType } from "@/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export async function useSendMessage(text: string, receiverId: string) {
+export async function SendMessage(text: string, receiverId: string) {
   try {
     const res = await axios.post("/api/send-message", {
       text,
       receiverId,
     });
-
-    alert("sent");
 
     return res.data;
   } catch (error) {
@@ -22,7 +21,7 @@ async function fetchMessages(receiverId: string) {
   return res.data;
 }
 
-export function useGetMessage(receiverId: string | undefined) {
+export function GetMessage(receiverId: string | undefined) {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<null | Error>(null);
@@ -33,9 +32,9 @@ export function useGetMessage(receiverId: string | undefined) {
     let isMounted = true;
 
     setIsLoading(true);
-
+    
     setIsError(null);
-
+    
     fetchMessages(receiverId)
       .then((data) => {
         if (isMounted) setMessages(data);

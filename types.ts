@@ -8,7 +8,7 @@ export type MessageType = {
   id: string;
   text: string;
   createdAt: string;
-  senderAt: string;
+  senderId: string;
   receiverId: string;
   sender: User;
   receiver: User;

@@ -12,7 +12,7 @@ type ChatState = {
   setActiveChatUser: (user: ChatUser) => void;
 };
 
-export const useChatStore = create<ChatState>((set) => ({
+export const ChatStore = create<ChatState>((set) => ({
   onlineIds: [],
   activeChatUser: null,
   setActiveChatUser: (user) => set({ activeChatUser: user }),

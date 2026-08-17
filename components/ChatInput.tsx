@@ -1,19 +1,19 @@
 "use client"
-import { useSendMessage } from "@/custom-hook/useMessage"
-import { useChatStore } from "@/lib/store"
+import { SendMessage } from "@/custom-hook/useMessage"
+import { ChatStore } from "@/lib/store"
 import { useState } from "react"
 import { IoIosSend } from "react-icons/io"
 
 const ChatInput = () => {
     const [text, setText] = useState<string>("")
-    const { activeChatUser } = useChatStore()
+    const { activeChatUser } = ChatStore()
     const receiverId = activeChatUser?.id
 
     async function handleSend() {
         if (!text) return
         if (!receiverId) return
 
-        await useSendMessage(text, receiverId)
+        await SendMessage(text, receiverId)
 
         setText("")
     }
